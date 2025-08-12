@@ -13,11 +13,18 @@ export const validate = (schema) => {
   };
 };
 
+// Strong password pattern
+const passwordPattern = new RegExp(
+  '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$'
+);
+
 // Auth validation schemas
 export const signupSchema = Joi.object({
   fullName: Joi.string().required().trim().min(2).max(100),
   email: Joi.string().email().required().trim().lowercase(),
-  password: Joi.string().required().min(6)
+  password: Joi.string().required().min(6).pattern(passwordPattern)
+    .message('Password must be at least 8 characters long, include uppercase, lowercase, number, and special character.')
+    .required()
 });
 
 export const loginSchema = Joi.object({
