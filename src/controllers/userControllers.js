@@ -1,5 +1,55 @@
 import User from '../models/userModels.js';
 
+// REGISTER /api/user/register
+export const registerUser = async (req, res) => {
+  const { fullName, email, password } = req.body;
+
+  try {
+    // Check if user already exists
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create the new user
+    const user = await User.create({
+      fullName,
+      email,
+      password: hashedPassword
+    });
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    );
+
+    res.status(201).json({
+      _id: user._id,
+      fullName: user.fullName,
+      email: user.email,
+      token
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
 // GET /api/user/me
 export const getProfile = async (req, res) => {
   try {
