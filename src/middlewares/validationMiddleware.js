@@ -22,9 +22,13 @@ const passwordPattern = new RegExp(
 export const signupSchema = Joi.object({
   fullName: Joi.string().required().trim().min(2).max(100),
   email: Joi.string().email().required().trim().lowercase(),
-  password: Joi.string().required().min(6).pattern(passwordPattern)
-    .message('Password must be at least 8 characters long, include uppercase, lowercase, number, and special character.')
+  password: Joi.string()
     .required()
+    .min(8)     
+    .pattern(passwordPattern)
+    .messages({
+      'string.pattern.base': 'Password must be at least 8 characters long, include uppercase, lowercase, number, and special character.'
+    })
 });
 
 export const loginSchema = Joi.object({
@@ -40,7 +44,13 @@ export const updateProfileSchema = Joi.object({
 
 export const changePasswordSchema = Joi.object({
   currentPassword: Joi.string().required(),
-  newPassword: Joi.string().required().min(6)
+  newPassword: Joi.string()
+    .required()
+    .min(8)  // Fixed: Changed from 6 to 8
+    .pattern(passwordPattern)  // Added: Same pattern as signup
+    .messages({
+      'string.pattern.base': 'New password must be at least 8 characters long, include uppercase, lowercase, number, and special character.'
+    })
 });
 
 // Job validation schemas
