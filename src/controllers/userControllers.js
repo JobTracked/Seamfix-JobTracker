@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import User from '../models/userModels.js';
 
 // REGISTER /api/user/register
