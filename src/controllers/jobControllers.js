@@ -40,7 +40,7 @@ export const createJob = async (req, res) => {
       userId: req.user.id, 
     });
 
-    res.status(201).json(job);
+    res.status(201).json({message: 'Job Created',job});
   } catch (error) {
     console.error('Creating Job Error:', error.message);
     res.status(500).json({ message: "Server error while creating job" });
