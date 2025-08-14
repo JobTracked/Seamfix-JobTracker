@@ -2,7 +2,7 @@ import Job from "../models/jobModels.js";
 
 export const getJobs = async (req, res) => {
   try {
-    const jobs = await Job.find();
+     const jobs = await Job.find({ userId: req.user.id });
 
     if (jobs.length === 0) {
       return res.status(404).json({
@@ -24,11 +24,23 @@ export const createJob = async (req, res) => {
   try {
   const { title, company, status, salary, notes, link } = req.body; 
     const user = req.user
-    console.log('User details:', user)
 
-    if (!title || !company || !status) {
-      return res.status(400).json({ message: "Please provide all fields" });
-    }
+
+    // if (!title || !company || !status) {
+    //   return res.status(400).json({ message: "Please provide all fields" });
+    // }
+const existingJob = await Job.findOne({
+title,
+company,
+userId: req.user.id
+});
+
+if (existingJob) {
+return res.status(400).json({
+message: 'You have already added the job title ${title} position at ${company}.'
+});
+}
+
 
     const job = await Job.create({
       title,
