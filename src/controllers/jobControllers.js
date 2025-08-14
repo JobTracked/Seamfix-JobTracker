@@ -58,7 +58,7 @@ message: 'You have already added the job title ${title} position at ${company}.'
 
     res.status(201).json({message: 'Job Created',job});
   } catch (error) {
-    console.error('Creating Job Error:', error.message);
+    // console.error('Creating Job Error:', error.message);
     res.status(500).json({ message: "Server error while creating job" });
   }
 };
