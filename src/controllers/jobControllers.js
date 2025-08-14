@@ -2,7 +2,7 @@ import Job from "../models/jobModels.js";
 
 export const getJobs = async (req, res) => {
   try {
-     const jobs = await Job.find({ userId: req.user.id });
+    const jobs = await Job.find({ userId: req.user.id });
 
     if (jobs.length === 0) {
       return res.status(404).json({
@@ -10,7 +10,15 @@ export const getJobs = async (req, res) => {
       });
     }
 
-    res.status(200).json(jobs);
+    // Filter out case-insensitive duplicates
+    const uniqueJobs = jobs.filter((job, index, self) =>
+      index === self.findIndex(j =>
+        j.title.toLowerCase() === job.title.toLowerCase() &&
+        j.company.toLowerCase() === job.company.toLowerCase()
+      )
+    );
+
+    res.status(200).json(uniqueJobs);
   } catch (error) {
     console.error(error.message);
     res.status(500).json({
