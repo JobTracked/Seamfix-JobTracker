@@ -23,12 +23,8 @@ export const getJobs = async (req, res) => {
 export const createJob = async (req, res) => {
   try {
   const { title, company, status, salary, notes, link } = req.body; 
-    const user = req.user
 
 
-    // if (!title || !company || !status) {
-    //   return res.status(400).json({ message: "Please provide all fields" });
-    // }
 const existingJob = await Job.findOne({
 title,
 company,
@@ -78,7 +74,6 @@ if (!req.body || Object.keys(req.body).length === 0) {
     if (job.userId.toString() !== req.user.id.toString()) {
   return res.status(401).json({ message: "Not authorized" });
 }
-
 
     const updatedJob = await Job.findOneAndUpdate(
       {id },
