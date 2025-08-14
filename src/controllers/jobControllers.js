@@ -20,7 +20,7 @@ export const getJobs = async (req, res) => {
 
     res.status(200).json(uniqueJobs);
   } catch (error) {
-    console.error(error.message);
+    // console.error(error.message);
     res.status(500).json({
       message: error.message || "Server error while fetching jobs"
     });
@@ -90,10 +90,10 @@ if (!req.body || Object.keys(req.body).length === 0) {
     );
 
    return  res.status(200).json({ 
-    message: 'Job Updated succesfulyy' ,
+    message: 'Job Updated succesfuly' ,
      updatedJob});
   } catch (error) {
-    console.error("Error updating jobs:",error.message);
+    // console.error("Error updating jobs:",error.message);
     res.status(500).json({ message: "Server error while updating job" });
   }
 };
@@ -120,7 +120,7 @@ export const deleteJob = async (req, res) => {
 
        return res.status(204).send();
   } catch (error) {
-    console.error('Error deleting jobs:',error.message);
+    // console.error('Error deleting jobs:',error.message);
     res.status(500).json({ message: "Server error while deleting job" });
   }
 };
