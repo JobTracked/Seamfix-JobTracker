@@ -4,7 +4,7 @@
   "description": "Node.js backend API for JobTracker application using Express.js, MongoDB, and JWT authentication.",
   "main": "app.js",
   "type": "module",
- "scripts": {
+  "scripts": {
     "test": "jest",
     "test:watch": "set NODE_OPTIONS=--experimental-vm-modules && jest --watch",
     "start": "node app.js",
@@ -21,6 +21,7 @@
     "joi": "^18.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.17.1",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "uuid": "^11.1.0"
   }
 }

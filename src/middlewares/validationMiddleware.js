@@ -1,22 +1,26 @@
 import Joi from 'joi';
 
-// Validation middleware
+// Universal validation middleware
 export const validate = (schema) => {
   return (req, res, next) => {
-    const { error } = schema.validate(req.body);
+    const { error, value } = schema.validate(req.body, {
+      abortEarly: false, 
+      stripUnknown: true, 
+      convert: true 
+    });
+
     if (error) {
       return res.status(400).json({
-        message: error.details[0].message.replace(/['"]/g, '')
+        errors: error.details.map((err) => err.message.replace(/['"]/g, ''))
       });
     }
+    req.body = value;
     next();
   };
 };
 
-// Strong password pattern
-const passwordPattern = new RegExp(
-  '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$'
-);
+// Allows any special character
+const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/;
 
 // Auth validation schemas
 export const signupSchema = Joi.object({
@@ -24,10 +28,12 @@ export const signupSchema = Joi.object({
   email: Joi.string().email().required().trim().lowercase(),
   password: Joi.string()
     .required()
-    .min(8)     
+    .min(8)
     .pattern(passwordPattern)
     .messages({
-      'string.pattern.base': 'Password must be at least 8 characters long, include uppercase, lowercase, number, and special character.'
+      'string.min': 'Password must be at least 8 characters long.',
+      'string.pattern.base':
+        'Password must include uppercase, lowercase, number, and special character.'
     })
 });
 
@@ -46,10 +52,12 @@ export const changePasswordSchema = Joi.object({
   currentPassword: Joi.string().required(),
   newPassword: Joi.string()
     .required()
-    .min(8)  // Fixed: Changed from 6 to 8
-    .pattern(passwordPattern)  // Added: Same pattern as signup
+    .min(8)
+    .pattern(passwordPattern)
     .messages({
-      'string.pattern.base': 'New password must be at least 8 characters long, include uppercase, lowercase, number, and special character.'
+      'string.min': 'New password must be at least 8 characters long.',
+      'string.pattern.base':
+        'New password must include uppercase, lowercase, number, and special character.'
     })
 });
 
@@ -57,15 +65,17 @@ export const changePasswordSchema = Joi.object({
 export const createJobSchema = Joi.object({
   title: Joi.string().required().trim().max(200),
   company: Joi.string().required().trim().max(100),
-  status: Joi.string().valid('Wishlist', 'Applied', 'Interviewing', 'Offer', 'Rejected').required(),
+  status: Joi.string()
+    .valid('Wishlist', 'Applied', 'Interviewing', 'Offer', 'Rejected')
+    .required(),
   link: Joi.string().uri().allow(''),
-  salary: Joi.string().allow(''),
-  notes: Joi.string().allow('')
+  salary: Joi.string().trim().allow(''),
+  notes: Joi.string().trim().allow('')
 });
 
 export const updateJobSchema = Joi.object({
-  title: Joi.string().trim().max(200),
-  company: Joi.string().trim().max(100),
+  title: Joi.string().trim().lowercase().max(200),
+  company: Joi.string().trim().lowercase().max(100),
   status: Joi.string().valid('Wishlist', 'Applied', 'Interviewing', 'Offer', 'Rejected'),
   link: Joi.string().uri().allow(''),
   salary: Joi.string().allow(''),
