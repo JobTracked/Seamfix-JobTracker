@@ -7,7 +7,7 @@ import { validate, createJobSchema, updateJobSchema } from '../middlewares/valid
 const router = express.Router();
 
 router.get('/', protect, getJobs );
-router.post('/', protect, validate(createJobSchema), createJob ); 
-router.put('/:JjobId', protect, validate(updateJobSchema), updateJob); 
+router.post('/create', protect, validate(createJobSchema), createJob ); 
+router.put('/:jobId', protect, validate(updateJobSchema), updateJob); 
 router.delete('/:jobId', protect, deleteJob ); 
 export default router; 

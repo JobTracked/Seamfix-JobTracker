@@ -65,10 +65,10 @@ export const changePasswordSchema = Joi.object({
 export const createJobSchema = Joi.object({
   title: Joi.string().required().trim().max(200),
   company: Joi.string().required().trim().max(100),
-  status: Joi.string()
+  status: Joi.string().trim()
     .valid('Wishlist', 'Applied', 'Interviewing', 'Offer', 'Rejected')
     .required(),
-  link: Joi.string().uri().allow(''),
+  link: Joi.string().uri().trim().allow(''),
   salary: Joi.string().trim().allow(''),
   notes: Joi.string().trim().allow('')
 });
@@ -76,8 +76,8 @@ export const createJobSchema = Joi.object({
 export const updateJobSchema = Joi.object({
   title: Joi.string().trim().lowercase().max(200),
   company: Joi.string().trim().lowercase().max(100),
-  status: Joi.string().valid('Wishlist', 'Applied', 'Interviewing', 'Offer', 'Rejected'),
-  link: Joi.string().uri().allow(''),
-  salary: Joi.string().allow(''),
-  notes: Joi.string().allow('')
+  status: Joi.string().trim().valid('Wishlist', 'Applied', 'Interviewing', 'Offer', 'Rejected'),
+  link: Joi.string().uri().trim().allow(''),
+  salary: Joi.string().trim().allow(''),
+  notes: Joi.string().trim().allow('')
 });
