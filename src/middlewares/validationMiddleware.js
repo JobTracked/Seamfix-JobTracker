@@ -63,8 +63,8 @@ export const changePasswordSchema = Joi.object({
 
 // Job validation schemas
 export const createJobSchema = Joi.object({
-  title: Joi.string().required().trim().max(200),
-  company: Joi.string().required().trim().max(100),
+  title: Joi.string().required().trim().lowercase().max(200),
+  company: Joi.string().required().trim().lowercase().max(100),
   status: Joi.string().trim()
     .valid('Wishlist', 'Applied', 'Interviewing', 'Offer', 'Rejected')
     .required(),
