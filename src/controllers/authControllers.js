@@ -21,6 +21,7 @@ export const signup = async (req, res) => {
     const token = generateToken(user._id);
 
     res.status(201).json({
+     message: "User created successfully",
       token,
       user: {
         id: user._id,
@@ -53,6 +54,7 @@ export const login = async (req, res) => {
     const token = generateToken(user._id);
 
     res.json({
+      message: "login successful",
       token,
       user: {
         id: user._id,
