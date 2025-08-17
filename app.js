@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import database from "./src/config/database.js";
 import authRoutes from './src/routes/authRoutes.js';
 import userRoutes from './src/routes/userRoutes.js';
+import jobsRoutes from "./src/routes/jobRoutes.js"
+
 
 dotenv.config();
 database();
@@ -18,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/jobs', jobsRoutes)
 
 // 404 handler
 app.use((req, res, next) => {
