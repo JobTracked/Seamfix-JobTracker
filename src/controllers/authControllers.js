@@ -12,7 +12,7 @@ export const signup = async (req, res) => {
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ message: 'Email already exists' });
     }
 
     const user = await User.create({ fullName, email, password });
@@ -53,7 +53,7 @@ export const login = async (req, res) => {
     // Generate token
     const token = generateToken(user._id);
 
-    res.json({
+    return res.status(201).json({
       message: "login successful",
       token,
       user: {
