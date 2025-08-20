@@ -162,7 +162,7 @@ describe('Auth Controller Tests', () => {
         { expiresIn: '7d' }
       );
 
-      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         message: "login successful",
         token: 'mocked-jwt-token',
