@@ -38,14 +38,19 @@ export const signupSchema = Joi.object({
 });
 
 export const loginSchema = Joi.object({
-  email: Joi.string().email().required().trim().lowercase(),
+email: Joi.string()
+  .trim()
+  .email({ tlds: { allow: true } })
+  .lowercase()
+  .max(254)
+  .required(),
   password: Joi.string().required()
 });
 
 // User validation schemas
 export const updateProfileSchema = Joi.object({
   fullName: Joi.string().trim().min(2).max(100),
-  email: Joi.string().email().trim().lowercase()
+  email: Joi.string().email().required().trim().lowercase(),
 });
 
 export const changePasswordSchema = Joi.object({
@@ -63,8 +68,8 @@ export const changePasswordSchema = Joi.object({
 
 // Job validation schemas
 export const createJobSchema = Joi.object({
-  title: Joi.string().required().trim().lowercase().max(200),
-  company: Joi.string().required().trim().lowercase().max(100),
+  title: Joi.string().required().trim().max(200),
+  company: Joi.string().required().trim().max(100),
   status: Joi.string().trim()
     .valid('Wishlist', 'Applied', 'Interviewing', 'Offer', 'Rejected')
     .required(),
@@ -74,10 +79,12 @@ export const createJobSchema = Joi.object({
 });
 
 export const updateJobSchema = Joi.object({
-  title: Joi.string().trim().lowercase().max(200),
-  company: Joi.string().trim().lowercase().max(100),
+  title: Joi.string().trim().max(200),
+  company: Joi.string().trim().max(100),
   status: Joi.string().trim().valid('Wishlist', 'Applied', 'Interviewing', 'Offer', 'Rejected'),
   link: Joi.string().uri().trim().allow(''),
   salary: Joi.string().trim().allow(''),
   notes: Joi.string().trim().allow('')
+}).min(1).messages({
+  'object.min': 'At least one field must be provided to update'
 });

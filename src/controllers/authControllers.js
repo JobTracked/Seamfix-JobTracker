@@ -26,7 +26,9 @@ export const signup = async (req, res) => {
       user: {
         id: user._id,
         fullName: user.fullName,
-        email: user.email
+        email: user.email,
+        createdAt: user.createdAt,  
+        updatedAt: user.updatedAt
       }
     });
   } catch (error) {
@@ -59,7 +61,9 @@ export const login = async (req, res) => {
       user: {
         id: user._id,
         fullName: user.fullName,
-        email: user.email
+        email: user.email,
+        createdAt: user.createdAt, 
+        updatedAt: user.updatedAt
       }
     });
   } catch (error) {

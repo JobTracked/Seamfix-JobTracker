@@ -2,6 +2,7 @@ import express from 'express';
 import { createJob, deleteJob, getJobs, updateJob } from '../controllers/jobControllers.js';
 import protect from '../middlewares/authMiddlewares.js';
 import { validate, createJobSchema, updateJobSchema } from '../middlewares/validationMiddleware.js';
+//import validateObjectId from '../middlewares/jobMiddleware.js';
 
 
 const router = express.Router();

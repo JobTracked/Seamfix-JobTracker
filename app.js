@@ -5,8 +5,7 @@ import database from "./src/config/database.js";
 import authRoutes from './src/routes/authRoutes.js';
 import userRoutes from './src/routes/userRoutes.js';
 import jobsRoutes from "./src/routes/jobRoutes.js"
-
-
+import { errorHandler } from "./src/middlewares/errorHandlerMiddleware.js";
 
 
 dotenv.config();
@@ -23,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/jobs', jobsRoutes)
-
+app.use(errorHandler);
 
 
 // 404 handler
