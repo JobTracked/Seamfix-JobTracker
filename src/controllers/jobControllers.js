@@ -82,7 +82,7 @@ export const createJob = async (req, res) => {
         userId,
         title: updateData.title,
         company: updateData.company,
-        id: { $ne: jobId } // exclude the job being updated
+        id: { $ne: jobId } 
       }).collation({ locale: "en", strength: 2 });
 
       if (duplicateJob) {
