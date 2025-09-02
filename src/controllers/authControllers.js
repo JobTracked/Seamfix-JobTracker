@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/userModels.js'; 
-//import { validateFields } from '../middlewares/validateFieldsMiddleware.js';
+
 
 // Generate JWT token
 const generateToken = (userId) => {
@@ -11,13 +11,6 @@ export const signup = async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
 
-    /*const invalidFields = validateFields({ fullName, email, password });
-
-    if (invalidFields.status  === true ) {
-      return res.status(400).json({ message: `Invalid field(s): ${invalidFields.invalidFields}`,
-        });
-      }
-*/
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'Email already exists' });
