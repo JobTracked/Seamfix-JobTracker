@@ -12,7 +12,8 @@ export const getProfile = async (req, res) => {
       id: user._id,
       fullName: user.fullName,
       email: user.email,
-      createdAt: user.createdAt
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -53,6 +54,7 @@ export const updateProfile = async (req, res) => {
         fullName: user.fullName,
         email: user.email,
         createdAt: user.createdAt,
+        updatedAt: user.updatedAt
       },
     });
   } catch (error) {
