@@ -16,7 +16,10 @@ export const validate = (schema) => {
       error.details.forEach(err => {
         const fieldName = err.path.join(".");
 
-        if (err.type === "any.required" || err.type === "string.empty") {
+        // Check for required/empty field errors
+        if (err.type === "any.required" || 
+            err.type === "string.empty" || 
+            (err.type === "any.only" && (err.context?.value === "" || err.context?.value == null))) {
           if (!requiredFields.includes(fieldName)) {
             requiredFields.push(fieldName);
           }
@@ -29,7 +32,6 @@ export const validate = (schema) => {
         }
       });
 
-    
       let message = "";
       if (requiredFields.length > 0) {
         message += `Required fields: ${requiredFields.join(", ")}`;
@@ -68,7 +70,6 @@ export const signupSchema = Joi.object({
       "string.min": "Password must be at least 8 characters long.",
       "string.pattern.base":
         "Password must include uppercase, lowercase, number, and special character.",
-      
     })
 }).unknown(false);
 
@@ -108,23 +109,29 @@ export const changePasswordSchema = Joi.object({
 
 // ---------------- JOBS ----------------
 export const createJobSchema = Joi.object({
-  title: Joi.string().required().trim().max(200),
-  company: Joi.string().required().trim().max(100),
+  title: Joi.string().required().trim().min(1).max(200),
+  company: Joi.string().required().trim().min(1).max(100),
   status: Joi.string()
+    .required()
     .trim()
     .valid("Wishlist", "Applied", "Interviewing", "Offer", "Rejected")
-    .required(),
+    .messages({
+      "any.only": "status must be one of [Wishlist, Applied, Interviewing, Offer, Rejected]"
+    }),
   link: Joi.string().uri().trim().allow(""),
   salary: Joi.string().trim().allow(""),
   notes: Joi.string().trim().allow("")
 }).unknown(false);
 
 export const updateJobSchema = Joi.object({
-  title: Joi.string().trim().max(200),
-  company: Joi.string().trim().max(100),
+  title: Joi.string().trim().min(1).max(200),
+  company: Joi.string().trim().min(1).max(100),
   status: Joi.string()
     .trim()
-    .valid("Wishlist", "Applied", "Interviewing", "Offer", "Rejected"),
+    .valid("Wishlist", "Applied", "Interviewing", "Offer", "Rejected")
+    .messages({
+      "any.only": "status must be one of [Wishlist, Applied, Interviewing, Offer, Rejected]"
+    }),
   link: Joi.string().uri().trim().allow(""),
   salary: Joi.string().trim().allow(""),
   notes: Joi.string().trim().allow("")
