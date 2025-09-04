@@ -1,7 +1,7 @@
 {
   "name": "job-tracker-backend",
   "version": "1.0.0",
-    "engines": {
+  "engines": {
     "node": ">=18.0.0"
   },
   "description": "Node.js backend API for JobTracker application using Express.js, MongoDB, and JWT authentication.",
@@ -19,11 +19,14 @@
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "joi": "^18.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.17.1",
+    "nodemailer": "^7.0.6",
+    "nodemailer-sendgrid": "^1.0.3",
     "nodemon": "^3.1.10",
     "uuid": "^11.1.0"
   },

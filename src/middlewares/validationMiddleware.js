@@ -17,9 +17,11 @@ export const validate = (schema) => {
         const fieldName = err.path.join(".");
 
         // Check for required/empty field errors
-        if (err.type === "any.required" || 
-            err.type === "string.empty" || 
-            (err.type === "any.only" && (err.context?.value === "" || err.context?.value == null))) {
+        if (
+          err.type === "any.required" || 
+          err.type === "string.empty" || 
+          (err.type === "any.only" && (err.context?.value === "" || err.context?.value == null))
+        ) {
           if (!requiredFields.includes(fieldName)) {
             requiredFields.push(fieldName);
           }
@@ -28,7 +30,9 @@ export const validate = (schema) => {
             unknownFields.push(fieldName);
           }
         } else {
-          validationErrors.push(err.message);
+          // Clean Joi's default message (remove quotes)
+          const cleanMessage = err.message.replace(/\"/g, "");
+          validationErrors.push(cleanMessage);
         }
       });
 
@@ -55,6 +59,7 @@ export const validate = (schema) => {
     next();
   };
 };
+
 
 const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/;
 

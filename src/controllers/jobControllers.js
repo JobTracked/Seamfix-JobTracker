@@ -27,20 +27,7 @@ export const getJobs = async (req, res) => {
   }
 };
 
-// Simple rules: What status can you change to?
-const STATUS_RULES = {
-  'Wishlist': ['Applied', 'Rejected'],
-  'Applied': ['Interviewing', 'Rejected'], 
-  'Interviewing': ['Offer', 'Rejected'],
-  'Offer': ['Rejected'],
-  'Rejected': ['Wishlist', 'Applied']
-};
-
-
-const canChangeStatus = (currentStatus, newStatus) => {
-  const allowedChanges = STATUS_RULES[currentStatus] || [];
-  return allowedChanges.includes(newStatus);
-};
+const allowedStatuses = ["Wishlist", "Applied", "Interviewing", "Offer", "Rejected"];
 
 export const createJob = async (req, res) => {
   try {
@@ -56,12 +43,6 @@ export const createJob = async (req, res) => {
     
     if (existingJob) {
       if (existingJob.status === "Rejected") {
-        if (status && !canChangeStatus("Rejected", status)) {
-          return res.status(400).json({
-            message: `Cannot create new application with ${status} status. From Rejected you can only start with Wishlist or Applied.`
-          });
-        }
-        
         const newJob = await Job.create({
           title, 
           company, 
@@ -73,12 +54,14 @@ export const createJob = async (req, res) => {
         });
         
         return res.status(201).json({
+          success: true,
           message: `New application created for ${title} at ${company} (previous was rejected)`,
           job: newJob
         });
       }
       
       return res.status(400).json({
+        success: false,
         message: `You already have an active application for ${title} at ${company} with status ${existingJob.status}. Please update your existing application instead of applying again.`
       });
     }
@@ -94,13 +77,15 @@ export const createJob = async (req, res) => {
     });
     
     return res.status(201).json({
+      success: true,
       message: "Job application created successfully",
       job: newJob
     });
     
   } catch (error) {
     console.error("Error creating job:", error);
-    return res.status(500).json({ 
+    return res.status(500).json({
+      success: false,
       message: "Something went wrong while creating the job" 
     });
   }
@@ -112,7 +97,7 @@ export const updateJob = async (req, res) => {
     const updateData = req.body;
 
     const job = await Job.findOne({ 
-      id: jobId,
+      id: jobId,  
       userId: req.user.id 
     });
 
@@ -123,25 +108,16 @@ export const updateJob = async (req, res) => {
       });
     }
 
-    if (updateData.status && updateData.status !== job.status) {
-      if (!canChangeStatus(job.status, updateData.status)) {
-        return res.status(400).json({
-          success: false,
-          message: `Cannot change status from ${job.status} to ${updateData.status}`
-        });
-      }
-    }
-
     if (updateData.title && updateData.company) {
       const duplicate = await Job.findOne({
         userId: req.user.id,
         title: updateData.title,
         company: updateData.company,
-        id: { $ne: jobId },
+        id: { $ne: jobId }, 
         status: { $ne: "Rejected" } 
       }).collation({ locale: "en", strength: 2 });
 
-      if (duplicate && duplicate.status !== "Rejected") {
+      if (duplicate) {
         return res.status(400).json({
           success: false,
           message: `You already have an application for ${updateData.title} at ${updateData.company}`
@@ -161,12 +137,12 @@ export const updateJob = async (req, res) => {
       return res.status(200).json({
         success: true,
         message: "No changes were made",
-        data: job
+        job: job  
       });
     }
 
     const updatedJob = await Job.findOneAndUpdate(
-      { id: jobId },
+      { id: jobId },  
       updateData,
       { new: true }
     );
@@ -174,7 +150,7 @@ export const updateJob = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Job updated successfully",
-      data: updatedJob
+      job: updatedJob  
     });
 
   } catch (error) {
