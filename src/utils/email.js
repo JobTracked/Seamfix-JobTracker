@@ -14,6 +14,10 @@ export const sendMail = async (options) => {
       to: options.email,
       subject: options.subject,
       text: options.message,
+  trackingSettings: {
+    clickTracking: { enable: false, enableText: false },
+    openTracking: { enable: false },
+  },
     };
 
     await transporter.sendMail(emailOptions);

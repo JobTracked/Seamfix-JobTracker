@@ -76,7 +76,7 @@ export const signupSchema = Joi.object({
       "string.pattern.base":
         "Password must include uppercase, lowercase, number, and special character.",
     })
-}).unknown(false);
+}).unknown(true);
 
 export const loginSchema = Joi.object({
   email: Joi.string()
@@ -86,7 +86,7 @@ export const loginSchema = Joi.object({
     .max(254)
     .required(),
   password: Joi.string().required()
-}).unknown(false);
+}).unknown(true);
 
 // ---------------- USERS ----------------
 export const updateProfileSchema = Joi.object({
@@ -94,7 +94,7 @@ export const updateProfileSchema = Joi.object({
   email: Joi.string().email().trim().lowercase()
 })
   .min(1)
-  .unknown(false)
+  .unknown(true)
   .messages({
     "object.min": "At least one field must be provided to update"
   });
@@ -110,7 +110,7 @@ export const changePasswordSchema = Joi.object({
       "string.pattern.base":
         "New password must include uppercase, lowercase, number, and special character."
     })
-}).unknown(false);
+}).unknown(true);
 
 // ---------------- JOBS ----------------
 export const createJobSchema = Joi.object({
@@ -126,7 +126,7 @@ export const createJobSchema = Joi.object({
   link: Joi.string().uri().trim().allow(""),
   salary: Joi.string().trim().allow(""),
   notes: Joi.string().trim().allow("")
-}).unknown(false);
+}).unknown(true);
 
 export const updateJobSchema = Joi.object({
   title: Joi.string().trim().min(1).max(200),
@@ -142,7 +142,7 @@ export const updateJobSchema = Joi.object({
   notes: Joi.string().trim().allow("")
 })
   .min(1)
-  .unknown(false)
+  .unknown(true)
   .messages({
     "object.min": "At least one field must be provided to update"
   });
