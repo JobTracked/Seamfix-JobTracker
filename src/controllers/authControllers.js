@@ -14,7 +14,7 @@ const generateResetToken = () => {
 };
 
 
-export const signup = async (req, res) => {
+/*export const signup = async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
 
@@ -41,6 +41,49 @@ export const signup = async (req, res) => {
     });
   } catch (error) {
     console.error('Signup error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+*/
+
+export const signup = async (req, res) => {
+  const startTime = Date.now();
+  
+  try {
+    console.log('⏱️ Signup started');
+    
+    const { fullName, email, password } = req.body;
+    
+    console.log('⏱️ Checking existing user...');
+    const existingUser = await User.findOne({ email });
+    console.log(`⏱️ User check took: ${Date.now() - startTime}ms`);
+    
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already exists' });
+    }
+
+    console.log('⏱️ Creating user...');
+    const createStart = Date.now();
+    const user = await User.create({ fullName, email, password });
+    console.log(`⏱️ User creation took: ${Date.now() - createStart}ms`);
+
+    const token = generateToken(user._id);
+    console.log(`⏱️ Total signup took: ${Date.now() - startTime}ms`);
+
+    res.status(201).json({
+      message: "User created successfully",
+      token,
+      user: {
+        id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt
+      }
+    });
+  } catch (error) {
+    console.error('🔴 Signup error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 };
