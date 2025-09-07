@@ -3,6 +3,9 @@ import { createJob, deleteJob, getJobs, updateJob } from '../controllers/jobCont
 import protect from '../middlewares/authMiddlewares.js';
 import { validate, createJobSchema, updateJobSchema } from '../middlewares/validationMiddleware.js';
 
+//import validateObjectId from '../middlewares/jobMiddleware.js';
+
+
 
 const router = express.Router();
 

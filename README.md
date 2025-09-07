@@ -9,7 +9,7 @@ Set up environment variables in .env:
 Start development server:
 npm run dev
 Project Structure
-src/ ├── config/ │ └── database.js ├── controllers/ │ ├── authController.js │ ├── userController.js │ └── jobController.js ├── middleware/ │ ├── authMiddlewares.js │ └── validationMiddlewares.js ├── models/ │ ├── userModels.js │ └── jobModels.js ├── routes/ │ ├── authRoutes.js │ ├── userRoutes.js │ └── jobRoutes.js └── app.js
+src/ ├── config/ │ └── database.js ├── lib/ │ └── redis.js  │ └── cron.js ├── controllers/ │ ├── authController.js │ ├── userController.js │ └── jobController.js ├── middleware/ │ ├── authMiddlewares.js │ └── validationMiddlewares.js ├── models/ │ ├── userModels.js │ └── jobModels.js ├── routes/ │ ├── authRoutes.js │ ├── userRoutes.js │ └── jobRoutes.js └── app.js
 
 API Endpoints
 ## API Endpoints Auth POST /api/auth/signup Description: Registers a new user.
