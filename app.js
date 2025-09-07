@@ -26,6 +26,18 @@ app.use('/api/jobs', jobsRoutes)
 app.use(errorHandler);
 
 
+
+
+// --- Health check route ---
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Server is healthy",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Catch 404 (route not found)
 app.use((req, res, next) => {
   return res.status(404).json({
