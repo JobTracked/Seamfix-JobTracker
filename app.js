@@ -1,14 +1,18 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import database from "./src/config/database.js";;
+import database from "./src/config/database.js";
 import authRoutes from './src/routes/authRoutes.js';
-import job from './src/lib/crons.js';
+import userRoutes from './src/routes/userRoutes.js';
+import jobsRoutes from "./src/routes/jobRoutes.js"
+import { errorHandler } from "./src/middlewares/errorHandlerMiddleware.js";
+import job from './src/lib/crons.js'
+
 
 dotenv.config();
 database();
 
-
+ 
 const app = express();
 
 // Middleware
@@ -25,6 +29,10 @@ app.get('/api/health', (req, res) => {
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/jobs', jobsRoutes)
+app.use(errorHandler);
+
 
 // Catch 404 (route not found)
 app.use((req, res, next) => {
