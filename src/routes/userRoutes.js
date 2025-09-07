@@ -9,3 +9,6 @@ router.get('/me', protect, getProfile);
 router.put('/me', protect, validate(updateProfileSchema), updateProfile);
 router.put('/me/password', protect,validate(changePasswordSchema), updatePassword);
 
+
+export default router
+
