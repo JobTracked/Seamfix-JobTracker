@@ -19,24 +19,23 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Health check (keep-alive endpoint)
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Server is healthy ✅",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString()
+  });
+});
+
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/jobs', jobsRoutes)
 app.use(errorHandler);
 
-
-
-
-// --- Health check route ---
-app.get("/health", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "Server is healthy",
-    uptime: process.uptime(),
-    timestamp: new Date().toISOString()
-  });
-});
 
 // Catch 404 (route not found)
 app.use((req, res, next) => {
