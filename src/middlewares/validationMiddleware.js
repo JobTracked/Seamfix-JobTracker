@@ -2,12 +2,7 @@
 
 export const validate = (schema) => {
   return (req, res, next) => {
-    const { error, value } = schema.validate(req.body, {
-      abortEarly: false,   
-      stripUnknown: true,  
-      convert: true        
-    });
-
+    const { error } = schema.validate(req.body);
     if (error) {
       const requiredFields = [];
       const validationErrors = [];
@@ -50,18 +45,17 @@ export const validate = (schema) => {
       }
 
       return res.status(400).json({
-        success: false,
-        message
+        message: error.details[0].message.replace(/['"]/g, '')
       });
     }
-
-    req.body = value;
     next();
   };
 };
 
-
-const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/;
+// Strong password pattern
+const passwordPattern = new RegExp(
+  '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$'
+);
 
 // ---------------- AUTH ----------------
 export const signupSchema = Joi.object({
@@ -72,9 +66,7 @@ export const signupSchema = Joi.object({
     .min(8)
     .pattern(passwordPattern)
     .messages({
-      "string.min": "Password must be at least 8 characters long.",
-      "string.pattern.base":
-        "Password must include uppercase, lowercase, number, and special character.",
+      'string.pattern.base': 'Password must be at least 8 characters long, include uppercase, lowercase, number, and special character.'
     })
 }).unknown(true);
 
@@ -106,43 +98,25 @@ export const changePasswordSchema = Joi.object({
     .min(8)
     .pattern(passwordPattern)
     .messages({
-      "string.min": "New password must be at least 8 characters long.",
-      "string.pattern.base":
-        "New password must include uppercase, lowercase, number, and special character."
+      'string.pattern.base': 'New password must be at least 8 characters long, include uppercase, lowercase, number, and special character.'
     })
 }).unknown(true);
 
 // ---------------- JOBS ----------------
 export const createJobSchema = Joi.object({
-  title: Joi.string().required().trim().min(1).max(200),
-  company: Joi.string().required().trim().min(1).max(100),
-  status: Joi.string()
-    .required()
-    .trim()
-    .valid("Wishlist", "Applied", "Interviewing", "Offer", "Rejected")
-    .messages({
-      "any.only": "status must be one of [Wishlist, Applied, Interviewing, Offer, Rejected]"
-    }),
-  link: Joi.string().uri().trim().allow(""),
-  salary: Joi.string().trim().allow(""),
-  notes: Joi.string().trim().allow("")
-}).unknown(true);
+  title: Joi.string().required().trim().max(200),
+  company: Joi.string().required().trim().max(100),
+  status: Joi.string().valid('Wishlist', 'Applied', 'Interviewing', 'Offer', 'Rejected').required(),
+  link: Joi.string().uri().allow(''),
+  salary: Joi.string().allow(''),
+  notes: Joi.string().allow('')
+});
 
 export const updateJobSchema = Joi.object({
-  title: Joi.string().trim().min(1).max(200),
-  company: Joi.string().trim().min(1).max(100),
-  status: Joi.string()
-    .trim()
-    .valid("Wishlist", "Applied", "Interviewing", "Offer", "Rejected")
-    .messages({
-      "any.only": "status must be one of [Wishlist, Applied, Interviewing, Offer, Rejected]"
-    }),
-  link: Joi.string().uri().trim().allow(""),
-  salary: Joi.string().trim().allow(""),
-  notes: Joi.string().trim().allow("")
-})
-  .min(1)
-  .unknown(true)
-  .messages({
-    "object.min": "At least one field must be provided to update"
-  });
+  title: Joi.string().trim().max(200),
+  company: Joi.string().trim().max(100),
+  status: Joi.string().valid('Wishlist', 'Applied', 'Interviewing', 'Offer', 'Rejected'),
+  link: Joi.string().uri().allow(''),
+  salary: Joi.string().allow(''),
+  notes: Joi.string().allow('')
+});

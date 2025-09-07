@@ -1,7 +1,20 @@
+import { deleteCache, getCache, setCache } from "../lib/redis.js";
 import Job from "../models/jobModels.js";
+
+
 
 export const getJobs = async (req, res) => {
   try {
+
+  
+    const cacheKey = `jobs:${req.user.id}`;
+
+    const cachedJobs = await getCache(cacheKey);
+
+    if(cachedJobs){
+      return res.status(200).json(JSON.parse(cachedJobs));
+    }
+
     const jobs = await Job.find({ userId: req.user.id })
       .sort({ updatedAt: -1 });
     
@@ -150,7 +163,7 @@ export const updateJob = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Job updated successfully",
-      job: updatedJob  
+      // job: updatedJob  
     });
 
   } catch (error) {

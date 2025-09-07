@@ -130,6 +130,7 @@ describe('Auth Controller Tests', () => {
       consoleSpy.mockRestore();
     });
   });
+
    describe('login', () => {
     const mockUser = {
       _id: '507f1f77bcf86cd799439011',

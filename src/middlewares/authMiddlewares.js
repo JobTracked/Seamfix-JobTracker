@@ -1,3 +1,4 @@
+
 import jwt from 'jsonwebtoken';
 import User from '../models/userModels.js'; 
 
@@ -31,3 +32,4 @@ export const protect = async (req, res, next) => {
 };
 
 export default protect;
+

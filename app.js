@@ -6,6 +6,7 @@ import authRoutes from './src/routes/authRoutes.js';
 import userRoutes from './src/routes/userRoutes.js';
 import jobsRoutes from "./src/routes/jobRoutes.js"
 import { errorHandler } from "./src/middlewares/errorHandlerMiddleware.js";
+import job from './src/lib/crons.js'
 
 
 dotenv.config();
@@ -15,6 +16,7 @@ database();
 const app = express();
 
 // Middleware
+job.start()
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
