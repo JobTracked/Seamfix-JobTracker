@@ -8,8 +8,8 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "test": "jest",
-    "test:watch": "set NODE_OPTIONS=--experimental-vm-modules && jest --watch",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --detectOpenHandles --forceExit",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
@@ -41,6 +41,12 @@
   "jest": {
     "transform": {
       "^.+\\.js$": "babel-jest"
-    }
+    },
+    "testEnvironment": "node"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
   }
 }
