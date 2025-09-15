@@ -10,7 +10,7 @@ export const sendMail = async (options) => {
     );
 
     const emailOptions = {
-      from: "Job Tracker Support <attahsixtus@gmail.com>", 
+      from:  `${process.env.FROM_NAME} <${process.env.FROM_EMAIL}>`,
       to: options.email,
       subject: options.subject,
       text: options.message,

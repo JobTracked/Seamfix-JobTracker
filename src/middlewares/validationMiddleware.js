@@ -88,6 +88,24 @@ export const loginSchema = Joi.object({
   password: Joi.string().required()
 }).unknown(true);
 
+export const forgotPasswordSchema = Joi.object({ email: Joi.string()
+    .trim()
+    .email({ tlds: { allow: true } })
+    .lowercase()
+    .max(254)
+    .required(),
+    }).unknown(true)
+
+export const resetPasswordSchema = Joi.object({ password: Joi.string().required().min(8)
+    .pattern(passwordPattern)
+    .messages({
+      "string.min": "Password must be at least 8 characters long.",
+      "string.pattern.base":
+        "Password must include uppercase, lowercase, number, and special character.",
+    })
+}).unknown(true);
+
+
 // ---------------- USERS ----------------
 export const updateProfileSchema = Joi.object({
   fullName: Joi.string().trim().min(2).max(100),
