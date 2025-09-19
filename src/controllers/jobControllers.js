@@ -137,7 +137,6 @@ export const updateJob = async (req, res) => {
       return res.status(200).json({
         success: true,
         message: "No changes were made",
-        job: job  
       });
     }
 
@@ -150,7 +149,6 @@ export const updateJob = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Job updated successfully",
-      job: updatedJob  
     });
 
   } catch (error) {
